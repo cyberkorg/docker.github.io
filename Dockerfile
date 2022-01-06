@@ -93,9 +93,20 @@ ENV TARGET=/usr/share/nginx/html
 WORKDIR $TARGET
 
 COPY --from=current  /usr/share/nginx/html .
+COPY rootfs /
 
 # Configure NGINX
 COPY _deploy/nginx/default.conf /etc/nginx/conf.d/default.conf
 ARG JEKYLL_ENV
 ENV JEKYLL_ENV=${JEKYLL_ENV}
 CMD echo -e "Docker docs are viewable at:\nhttp://0.0.0.0:4000 (build target: ${JEKYLL_ENV})"; exec nginx -g 'daemon off;'
+
+FROM deploy AS dd-ext
+COPY rootfs /
+
+LABEL org.opencontainers.image.title="Docs" \
+    org.opencontainers.image.description="Docs Extension." \
+    org.opencontainers.image.vendor="Docker Inc." \
+    com.docker.desktop.extension.api.version="0.1.0"
+
+WORKDIR /

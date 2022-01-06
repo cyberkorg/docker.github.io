@@ -1,0 +1,15 @@
+{
+  "desktop-plugin-version": "0.1.0",
+  "name": "Docs",
+  "provider": "Docker Inc.",
+  "vm": {
+    "composefile":"docker-compose.yml"
+  },
+  "ui": {
+    "dashboard-tab": {
+      "title": "Docs",
+      "root": "/ui",
+      "src": "index.html"
+    }
+  }
+}
