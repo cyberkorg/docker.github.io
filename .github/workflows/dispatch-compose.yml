@@ -22,13 +22,13 @@ jobs:
         name: Fetch reference API
         uses: docker/build-push-action@v3
         with:
-          context: ${{ github.event.inputs.context }}
-          target: ${{ github.event.inputs.target }}
+          context: ${{ github.event.client_payload.context }}
+          target: ${{ github.event.client_payload.target }}
           outputs: ./_data/compose-cli
       -
         name: Update compose_version in _config.yml
         run: |
-          yq e -i '.compose_version = "${{ github.event.inputs.release }}"' _config.yml
+          yq e -i '.compose_version = "${{ github.event.client_payload.release }}"' _config.yml
           cat _config.yml | yq .compose_version
       -
         name: Commit changes
