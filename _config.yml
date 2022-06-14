@@ -3,16 +3,13 @@
 #
 # This file overrides options set in _config.yml for production / deploy
 ##
-
 name: Docker Documentation
-
 markdown: kramdown
 highlighter: rouge
 incremental: true
 permalink: pretty
 safe: false
 lsi: false
-
 # https://kramdown.gettalong.org/options.html
 # https://github.com/kramdown/parser-gfm/blob/master/lib/kramdown/parser/gfm/options.rb
 kramdown:
@@ -22,7 +19,6 @@ kramdown:
   html_to_native: true
   syntax_highlighter: rouge
   toc_levels: 2..3
-
 exclude:
   - _samples
   - _scripts
@@ -33,20 +29,18 @@ exclude:
   - LICENSE
   - Makefile
   - README.md
-
 # Component versions -- address like site.docker_ce_version
 # You can't have - characters in these for non-YAML reasons.
 # When updating 'latest_engine_api_version', also update 'min_api_threshold' below.
 latest_engine_api_version: "1.41"
 docker_ce_version: "20.10"
 compose_v1_version: "1.29.2"
-compose_version: "v2.6.0"
+compose_version: "v2.9.0"
 compose_file_v3: "3.9"
 compose_file_v2: "2.4"
 machine_version: "0.16.0"
 distribution_version: "2.7"
 compose_switch_version: "1.0.4"
-
 # Options for displaying minimum API version requirements in the reference pages.
 #
 # The reference pages show badges for commands and options (flags) that require
@@ -65,14 +59,12 @@ compose_switch_version: "1.0.4"
 # The "min_api_threshold" option specifies the minimum required API version for
 # which we show a badge (currently: API v1.40, or "Docker 19.03").
 min_api_threshold: 1.40
-
 # List of plugins to enable for local development builds. Mostly the same as
 # for production, but without the "jekyll-sitemap" plugin, which is not needed
 # for previewing, and excluding saves some time to build
 plugins:
   - jekyll-redirect-from
   - jekyll-relative-links
-
 # Assets
 #
 # We specify the directory for Jekyll so we can use @imports.
@@ -82,7 +74,6 @@ plugins:
 sass:
   sass_dir: _scss
   style: expanded
-
 # Set default options / metadata for some paths.
 #
 # Setting options here prevents having to repeat the same option in front-matter
@@ -103,12 +94,10 @@ defaults:
       sitemap: false
       toc_min: 2
       toc_max: 4
-
   - scope:
       path: engine/reference/commandline
     values:
       skip_read_time: true
-
 # Fetch upstream resources (reference documentation) used by _plugins/fetch_remote.rb
 # - repo is the GitHub repository to fetch from
 # - ref the Git reference
@@ -133,14 +122,12 @@ fetch-remote:
         src:
           - "docs/reference/commandline/cli.md"
           - "docs/reference/commandline/dockerd.md"
-
   - repo: "https://github.com/docker/docker"
     ref: "20.10"
     paths:
       - dest: "engine/api"
         src:
           - "docs/api/**"
-
   - repo: "https://github.com/docker/compose-cli"
     ref: "main"
     paths:
@@ -149,7 +136,6 @@ fetch-remote:
           - "docs/*.md"
           - "!docs/README.md" # readme to make things nice in the compose-cli repo, but meaningless here
           - "!docs/architecture.md" # Compose-CLI architecture, unrelated to cloud integration
-
   - repo: "https://github.com/distribution/distribution"
     ref: "release/2.7"
     paths:
