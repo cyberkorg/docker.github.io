@@ -34,8 +34,8 @@ jobs:
             echo "BUILDX_TARGET=${{ github.event.client_payload.bake_target }}" >> $GITHUB_ENV
             echo "DOCS_FORMATS=${{ github.event.client_payload.docs_formats }}" >> $GITHUB_ENV
           else
-            echo "DRY_RUN=${{ github.inputs.dry-run }}" >> $GITHUB_ENV
-            echo "BUILDX_CONTEXT=https://github.com/docker/buildx.git#${{ github.inputs.tag }}" >> $GITHUB_ENV
+            echo "DRY_RUN=${{ github.events.inputs.dry-run }}" >> $GITHUB_ENV
+            echo "BUILDX_CONTEXT=https://github.com/docker/buildx.git#${{ github.events.inputs.tag }}" >> $GITHUB_ENV
             echo "BUILDX_TARGET=update-docs" >> $GITHUB_ENV
             echo "DOCS_FORMATS=yaml" >> $GITHUB_ENV
           fi
