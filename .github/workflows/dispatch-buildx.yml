@@ -50,7 +50,7 @@ jobs:
           git add -A .
       -
         name: Create PR
-        if: ${{ env.DRY_RUN != "true" }}
+        if: env.DRY_RUN != true
         uses: peter-evans/create-pull-request@923ad837f191474af6b1721408744feb989a4c27 # v4.0.4
         with:
           commit-message: "build: update buildx reference to ${{ github.event.client_payload.release }}"
