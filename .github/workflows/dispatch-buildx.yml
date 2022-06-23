@@ -1,0 +1,64 @@
+name: dispatch-buildx
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Git tag reference to generate docs from buildx repo'
+        required: true
+      dry-run:
+        description: 'Dry run'
+        required: false
+        type: boolean
+        default: true
+  repository_dispatch:
+    types: [buildx-ref-docs]
+
+jobs:
+  api-reference:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Prepare
+        run: |
+          rm -rf ./_data/buildx/*
+          if [ "${{ github.envent_name }}" = "repository_dispatch" ]; then
+            echo "DRY_RUN=false" >> $GITHUB_ENV
+            echo "BUILDX_CONTEXT=${{ github.event.client_payload.context }}" >> $GITHUB_ENV
+            echo "BUILDX_TARGET=${{ github.event.client_payload.bake_target }}" >> $GITHUB_ENV
+            echo "DOCS_FORMATS=${{ github.event.client_payload.docs_formats }}" >> $GITHUB_ENV
+          else
+            echo "DRY_RUN=${{ github.inputs.dry-run }}" >> $GITHUB_ENV
+            echo "BUILDX_CONTEXT=https://github.com/docker/buildx.git#${{ github.inputs.tag }}" >> $GITHUB_ENV
+            echo "BUILDX_TARGET=update-docs" >> $GITHUB_ENV
+            echo "DOCS_FORMATS=yaml" >> $GITHUB_ENV
+          fi
+      -
+        name: Fetch reference
+        uses: docker/bake-action@v3
+        with:
+          targets: ${{ env.BUILDX_TARGET }}
+          set: |
+            *.context=${{ env.BUILDX_CONTEXT }}
+            *.output=./_data/buildx
+      -
+        name: Commit changes
+        run: |
+          git add -A .
+      -
+        name: Create PR
+        if: ${{ env.DRY_RUN != "true" }}
+        uses: peter-evans/create-pull-request@923ad837f191474af6b1721408744feb989a4c27 # v4.0.4
+        with:
+          commit-message: "build: update buildx reference to ${{ github.event.client_payload.release }}"
+          signoff: true
+          branch: dispatch/buildx-ref-${{ github.event.client_payload.release }}
+          delete-branch: true
+          title: Update buildx reference to ${{ github.event.client_payload.release }}
+          body: |
+            Update the buildx reference documentation to keep in sync with the latest release `${{ github.event.client_payload.release }}`
+          labels: area/Build
+          draft: false
