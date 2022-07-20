@@ -175,9 +175,9 @@ fetch-remote:
         src:
           - "docs/configuration.md"
 
-  - repo: "https://github.com/moby/buildkit"
+  - repo: "https://github.com/crazy-max/buildkit"
     default_branch: "master"
-    ref: "master"
+    ref: "docs-ref-move-frontmatter"
     paths:
       - dest: "_includes/dockerfile/reference.md"
         src:
